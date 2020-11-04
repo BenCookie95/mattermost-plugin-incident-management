@@ -63,8 +63,8 @@ describe('slash command > test', () => {
                 cy.apiLogin('sysadmin');
 
                 cy.apiGetConfig().then((config) => {
-                    console.log("Before updating: ");
-                    console.log(config);
+                    cy.log("Before updating: ");
+                    cy.log(config);
                 });
 
                 // # Set EnableTesting to false.
@@ -75,8 +75,8 @@ describe('slash command > test', () => {
                 });
 
                 cy.apiGetConfig().then((config) => {
-                    console.log("After updating : ");
-                    console.log(config);
+                    cy.log("After updating : ");
+                    cy.log(config);
                 });
 
             });

@@ -62,9 +62,9 @@ describe('slash command > test', () => {
                 // # Login as sysadmin.
                 cy.apiLogin('sysadmin');
 
-                cy.apiGetConfig().then((config) => {
+                cy.apiGetConfig().then((response) => {
                     cy.log("Before updating: ");
-                    cy.log(config);
+                    cy.log(response.config.ServiceSettings.EnableTesting);
                 });
 
                 // # Set EnableTesting to false.
@@ -72,12 +72,13 @@ describe('slash command > test', () => {
                     ServiceSettings: {
                         EnableTesting: false
                     },
-                });
+                }).then(() => {
+                    cy.apiGetConfig().then((response) => {
+                        cy.log("After updating : ");
+                        cy.log(response.config.ServiceSettings.EnableTesting);
+                    });
+                })
 
-                cy.apiGetConfig().then((config) => {
-                    cy.log("After updating : ");
-                    cy.log(config);
-                });
 
             });
 
@@ -92,22 +93,6 @@ describe('slash command > test', () => {
             it('fails to run subcommand bulk-data', () => {
                 // # Execute the bulk-data command.
                 cy.executeSlashCommand('/incident test bulk-data');
-
-                // * Verify the ephemeral message warns that the user is not admin.
-                cy.verifyEphemeralMessage('Setting EnableTesting must be set to true to run the test command.');
-            });
-
-            it('fails to run subcommand create-incident', () => {
-                // # Execute the create-incident command.
-                cy.executeSlashCommand('/incident test create-incident');
-
-                // * Verify the ephemeral message warns that the user is not admin.
-                cy.verifyEphemeralMessage('Setting EnableTesting must be set to true to run the test command.');
-            });
-
-            it('fails to run subcommand self', () => {
-                // # Execute the self command.
-                cy.executeSlashCommand('/incident test self');
 
                 // * Verify the ephemeral message warns that the user is not admin.
                 cy.verifyEphemeralMessage('Setting EnableTesting must be set to true to run the test command.');

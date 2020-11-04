@@ -287,6 +287,9 @@ Cypress.Commands.add('apiUpdateConfig', (newConfig = {}) => {
 
         const config = merge.all([oldConfig, newConfig]);
 
+        cy.log('From apiUpdateConfig:');
+        cy.log(config.ServiceSettings.EnableTesting);
+
         // # Set the modified config
         return cy.request({
             url: '/api/v4/config',

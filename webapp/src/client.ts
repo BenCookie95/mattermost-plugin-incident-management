@@ -5,6 +5,7 @@ import {getCurrentChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {GetStateFunc} from 'mattermost-redux/types/actions';
 import {UserProfile} from 'mattermost-redux/types/users';
+import {Post} from 'mattermost-redux/types/posts';
 import {AnyAction, Dispatch} from 'redux';
 import qs from 'qs';
 
@@ -255,6 +256,18 @@ export function exportChannelUrl(channelId: string) {
     }, {addQueryPrefix: true});
 
     return `${exportPluginUrl}/export${queryParams}`;
+}
+
+export async function fetchPost(postId: string): Promise<Post | null> {
+    return Client4.getPost(postId).then((response) => {
+        if (response.error) {
+            // TODO: Should be presented to the user? https://mattermost.atlassian.net/browse/MM-24271
+            console.log(response.error); // eslint-disable-line no-console
+            return null;
+        }
+
+        return response as Post;
+    });
 }
 
 export const doGet = async (url: string) => {
